@@ -1,10 +1,9 @@
 const NodeMediaServer = require('./');
 const axios = require('axios');
 
-const apiConfig = {
-  url: '',
-
-}
+const instance = axios.create({
+  baseURL: 'http://localhost:3001/api/'
+});
 
 const config = {
   rtmp: {
@@ -57,9 +56,12 @@ nms.on('prePublish', (id, StreamPath, args) => {
   console.log("==============pre");
 
 
-  axios.post(`/users/${StreamPath}`, {})
+  instance.post(`users/FprkE6Muu`, { signature: "sdfsdf" })
   .then((res) => {
-    //if the response is not ok reject the session
+    console.log(res.data);
+    
+  }).catch((e) => {
+    console.log("----" + e);
   });
   // let session = nms.getSession(id);
   // session.reject();
@@ -69,10 +71,13 @@ nms.on('postPublish', (id, StreamPath, args) => {
   console.log('[NodeEvent on postPublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
   console.log("==============post");
 
-  axios.post(`/users/${StreamPath}`, { online: true })
+  instance.post(`streams/FprkE6Muu`, { online: true })
   .then((res) => {
+    console.log("11111111111" + res);
     
-  })
+  }).catch((e) => {
+    console.log("22222222222" + e);
+  });
 });
 
 nms.on('donePublish', (id, StreamPath, args) => {
