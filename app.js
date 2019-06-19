@@ -5,12 +5,12 @@ const axios = require('axios');
 //TODO aquire userid programmaticly
 
 const instance = axios.create({
-  baseURL: 'http://159.65.197.36:3001/api/'
+  baseURL: 'http://localhost:3001/api/'
 });
 
 const config = {
   rtmp: {
-    port: 1936,
+    port: 1935,
     chunk_size: 60000,
     gop_cache: true,
     ping: 30,
