@@ -5,7 +5,7 @@ const axios = require('axios');
 //TODO aquire userid programmaticly
 
 const instance = axios.create({
-  baseURL: 'http://localhost:3001/api/'
+  baseURL: 'http://159.65.197.36:3001/api/'
 });
 
 const config = {
