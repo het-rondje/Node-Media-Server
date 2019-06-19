@@ -6,7 +6,7 @@ const axios = require('axios');
 
 const instance = axios.create({
   baseURL: 'http://159.65.197.36:3001/api/'
-});4
+});
 
 const config = {
   rtmp: {
@@ -72,7 +72,7 @@ nms.on('prePublish', (id, StreamPath, args) => {
 nms.on('postPublish', (id, StreamPath, args) => {
   console.log('[NodeEvent on postPublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
   console.log("==============post");
-
+  
   var key = StreamPath.split('/')[2];
 
   instance.post(`streams/${key}`, { online: true })
