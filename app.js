@@ -58,7 +58,9 @@ nms.on('prePublish', (id, StreamPath, args) => {
   console.log('[NodeEvent on prePublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
   console.log("==============pre");
 
-  instance.post(`users/cUy--uvu-`)
+  var key = StreamPath.split('/')[2];
+
+  instance.post(`users/` + key)
   .then((res) => {
     //TODO maybe logging?
   }).catch((e) => {
@@ -70,8 +72,10 @@ nms.on('prePublish', (id, StreamPath, args) => {
 nms.on('postPublish', (id, StreamPath, args) => {
   console.log('[NodeEvent on postPublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
   console.log("==============post");
+  
+  var key = StreamPath.split('/')[2];
 
-  instance.post(`streams/cUy--uvu-`, { online: true })
+  instance.post(`streams/${key}`, { online: true })
   .then((res) => {
     //TODO logging or handling response
   }).catch((e) => {
@@ -80,7 +84,9 @@ nms.on('postPublish', (id, StreamPath, args) => {
 });
 
 nms.on('donePublish', (id, StreamPath, args) => {
-  instance.post(`streams/cUy--uvu-`, { online: false })
+  var key = StreamPath.split('/')[2];
+
+  instance.post(`streams/${key}`, { online: false })
   .then((res) => {
     //TODO logging or handling response
   }).catch((e) => {
