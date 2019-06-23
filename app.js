@@ -1,4 +1,12 @@
 const NodeMediaServer = require('./');
+const axios = require('axios');
+
+//TODO aquire Signature programmaticly
+//TODO aquire userid programmaticly
+
+const instance = axios.create({
+  baseURL: 'http://localhost:3001/api/'
+});
 
 const config = {
   rtmp: {
@@ -48,29 +56,58 @@ nms.on('doneConnect', (id, args) => {
 
 nms.on('prePublish', (id, StreamPath, args) => {
   console.log('[NodeEvent on prePublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
-  // let session = nms.getSession(id);
-  // session.reject();
+  console.log("==============pre");
+
+  var key = StreamPath.split('/')[2];
+
+  instance.post(`users/` + key)
+  .then((res) => {
+    //TODO maybe logging?
+  }).catch((e) => {
+    let session = nms.getSession(id);
+    session.reject();
+  });
 });
 
 nms.on('postPublish', (id, StreamPath, args) => {
   console.log('[NodeEvent on postPublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
+  console.log("==============post");
+  
+  var key = StreamPath.split('/')[2];
+
+  instance.post(`streams/${key}`, { online: true })
+  .then((res) => {
+    //TODO logging or handling response
+  }).catch((e) => {
+    //TODO Error handling
+  });
 });
 
 nms.on('donePublish', (id, StreamPath, args) => {
-  console.log('[NodeEvent on donePublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
+  var key = StreamPath.split('/')[2];
+
+  instance.post(`streams/${key}`, { online: false })
+  .then((res) => {
+    //TODO logging or handling response
+  }).catch((e) => {
+    //TODO Error handling
+  });
 });
 
 nms.on('prePlay', (id, StreamPath, args) => {
   console.log('[NodeEvent on prePlay]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
+  console.log("==============preplay");
   // let session = nms.getSession(id);
   // session.reject();
 });
 
 nms.on('postPlay', (id, StreamPath, args) => {
   console.log('[NodeEvent on postPlay]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
+  console.log("==============postplay");
 });
 
 nms.on('donePlay', (id, StreamPath, args) => {
   console.log('[NodeEvent on donePlay]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
+  console.log("==============doneplay");
 });
 
